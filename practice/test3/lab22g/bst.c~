@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "bst.h"
+#include "mylib.h"
+
+struct bstnode {
+    char *key;
+    bst left;
+    bst right;
+};
+
+bst bst_new{
+    return NULL;
+}
+
+bst bst_free(bst b){
+    free(b->key);
+    bst_free(b->left);
+    bst_free(b->right);
+    free(b);
+    return b;
+}
+
+bst bst_insert(bst b, char *str){
+    if (b == NULL){
+        b = emalloc(sizeof *b);
+        b->key = emalloc((strlen(str) + 1) * sizeof str[0]);
+        b->left = NULL;
+        b->right = NULL;
+        strcpy(b->key,str);
+    }else if (strcmp(str,b->key) < 0){
+        b->left = bst_insert(b->left,str);
+    }else if (strcmp(str,b->key) > 0){
+        b->right = bst_insert(b->right,str);
+    }
+    return b;
+}

@@ -1,0 +1,6 @@
+In this assignment you will combine some of the code written in the labs to produce a larger
+program. This program will be used to process two groups of words. The first group will be
+read from a file specified on the command line. The second group will be read from stdin.
+If any word read from stdin is not contained in the file then it will get printed to stdout. A
+moment of reflection will confirm that this program could be used as a rudimentary spell-
+checker. Running your program with a command like this

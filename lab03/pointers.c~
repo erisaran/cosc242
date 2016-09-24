@@ -1,0 +1,16 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+
+void max_min(int *a, int n, int *max, int *min){
+    printf("%d %p",*max,*max);
+}
+
+int main(void) {
+    int my_array[] = { 5,2,7,3,4 };
+    int biggest, smallest;
+    max_min(my_array,5, &biggest, &smallest);
+    printf("max %d min %d\n",biggest,smallest);
+
+    return 0;
+}

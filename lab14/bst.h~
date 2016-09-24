@@ -1,0 +1,11 @@
+#ifndef BST_H_
+#define BST_H_
+
+#include <stdio.h>
+
+typedef struct bst_node *bst; /* should live in bst.h */
+
+extern int bst_search(bst b, char *key);
+extern bst bst_insert(bst b, char *key);
+
+#endif

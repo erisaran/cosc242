@@ -1,0 +1,131 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "mylib.h"
+#include "graph.h"
+#include "q.h"
+
+typedef enum { UNVISITED, VISITED_SELF, VISITED_DESCENDANTS } state_t;
+typedef enum {UNDIRECTED, DIRECTED } direct_t;
+
+struct graphrec {
+    int size;
+    vertex *vertices;
+    int **edges;
+    direct_t type;
+};
+
+struct vertexrec {
+    state_t state;
+    int predecessor;
+    int distance;
+    int finish;
+    int number;
+};
+
+vertex vertex_new(int num){
+    vertex v = emalloc(sizeof *v);
+    v->state = UNVISITED;
+    v->predecessor = -1;
+    v->distance = -1;
+    v->finish = 0;
+    v->number = num;
+    return v;
+}
+
+graph graph_new(int v){
+    int i,r;
+    graph g = emalloc(sizeof *g);
+    g->size = v;
+    g->type = UNDIRECTED;
+    g->edges = emalloc(v * sizeof g->edges[0]);
+    for (i = 0; i < v; i ++){
+        g->edges[i] = emalloc(v * sizeof g->edges[0][0]);
+        for (r = 0; r < v; r++){
+            g->edges[i][r] = 0;
+        }
+    }
+    g->vertices = emalloc(v * sizeof g->vertices[0]);
+    for (i = 0; i < v; i ++){
+        g->vertices[i] = vertex_new(i);
+    }
+    return g;
+}
+
+void graph_free(graph g){
+    int i = 0;
+    for (i = 0; i < g->size; i ++){
+        free(g->edges[i]);
+    }
+    for (i = 0; i < g->size; i ++){
+        free(g->vertices[i]);
+    }
+    free(g->edges);
+    free(g->vertices);
+    free(g);
+}
+
+void add_undirected(graph g, int v, int connect_to){
+    g->edges[v][connect_to] = 1;
+    g->edges[connect_to][v] = 1;
+}
+
+void add_directed(graph g, int v, int connect_to){
+    g->edges[v][connect_to] = 1;
+}
+
+void graph_add_edge(graph g, int v, int connect_to){
+    if (g->type == UNDIRECTED){
+        add_undirected(g, v, connect_to);
+    }else {
+        add_directed(g, v, connect_to);
+    }
+}
+
+void graph_bfs(graph g, int source){
+    int i,a;
+    queue q = queue_new();
+    vertex u;
+    for (i = 0; i < g->size; i++){
+        g->vertices[i]->state = UNVISITED;
+        g->vertices[i]->predecessor = -1;
+        g->vertices[i]->distance = -1;
+    }
+    g->vertices[source]->state = VISITED_SELF;
+    g->vertices[source]->distance = 0;
+    enqueue(q,g->vertices[source]);
+    while (queue_size(q) > 0){
+        u = dequeue(q);
+        for (a = 0; a < g->size; a++){
+            if (g->edges[u->number][a] == 1){
+                if (g->vertices[a]->state == UNVISITED){
+                    g->vertices[a]->state = VISITED_SELF;
+                    g->vertices[a]->distance = u->distance + 1;
+                    g->vertices[a]->predecessor = u->number;
+                    enqueue(q,g->vertices[a]);
+                }
+            }
+        }
+        u->state = VISITED_DESCENDANTS;
+    }
+    queue_free(q);
+}
+
+void graph_print(graph g){
+    int r,c;
+    for (r = 0; r < g->size; r ++){
+        printf("%d | ",r);
+        for (c = 0; c < g->size; c ++){
+            if (g->edges[r][c] > 0){
+                printf("%2d", g->vertices[c]->number);
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+    printf("vertex distance pred\n");
+    for (r = 0; r < g->size; r ++){
+        printf("%3d %8d %5d\n", r, g->vertices[r]->distance,
+               g->vertices[r]->predecessor);
+    }
+}
+            

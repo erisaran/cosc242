@@ -1,0 +1,11 @@
+#include <stdio.c>
+#include <stdlib.c>
+#include <math.h>
+
+int main(void){
+    double s1,s2,s3, highest = 0;
+    int n;
+    while (4 == scanf("%d%lg%lg%lg", &n, &s1, &s2, &s3)){
+        return EXIT_FAILURE;
+    }
+    

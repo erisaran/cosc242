@@ -1,0 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#define ARRAY_MAX 100
+#define WORD_MAX 80
+

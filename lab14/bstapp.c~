@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "mylib.h"
+#include "bst.h"
+
+void print_key(char *s) {
+    printf("%s\n", s);
+}
+
+int main(void/*int argc, char **argv*/) {
+    bst b = bst_new();
+    /*if (argc > 0){
+        h = htable_new(atoi(argv[1]));
+        }
+    while (getword(word, sizeof word, stdin) != EOF) {
+        htable_insert(h, word);
+    }
+    */
+    b = bst_insert(b, "dog");
+    b = bst_insert(b, "cat");
+    b = bst_insert(b, "giraffe");
+    b = bst_insert(b, "fish");
+    b = bst_insert(b, "bird");
+    b = bst_insert(b, "panther");
+    b = bst_insert(b, "cheetah");
+    bst_inorder(b, print_key);
+    bst_preorder(b, print_key);
+    b = bst_delete(b, "giraffe");
+    printf("\n\n");
+    bst_inorder(b, print_key);
+    bst_preorder(b, print_key);
+    return EXIT_SUCCESS;
+}
